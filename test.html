@@ -1,0 +1,52 @@
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    <?php
+        $sql = "SELECT * FROM tillsales";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0){
+            $tot = 0;
+            echo "<thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>qty</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>";
+            while($row = $result->fetch_assoc()){
+                $id = $row['id'];
+                $pid = $row['pid'];
+                $sqlt = "SELECT * FROM product WHERE id = {$pid}";
+                $resultt = $conn->query($sqlt);
+                if ($resultt->num_rows > 0){
+                    while($rowt = $resultt->fetch_assoc()){
+                        $product = $rowt['product'];
+                    }
+                }
+            
+                $price = $row['price'];
+                $qty = $row['qty'];
+                $sum = $price * $qty;
+                $tot += $sum;
+                echo "<tr>
+                    <td>{$product}</td>
+                    <td>{$qty}</td>
+                    <td>{$price}</td>
+                    <td>{$sum}</td>
+                    <td><a href = 'processing?deleteproduct={$id}'>Delete</a></td>
+                </tr>";
+            }
+            echo "<tr>
+                <th colspan = '3'>Total</th>
+                <th>Rs. {$tot}</th>
+                </tr>
+                </tbody>
+                </table>
+                <form action = 'processing' method = 'post'>
+                    <button type = 'button' onclick = 'loadreceipt()' name = 'saveid' class=\"btn btn-primary\" style = \"background:#489689;border:none;\">Add Sale</button>
+                </div>
+                </form>";
+        }
+    ?>
+</table>
